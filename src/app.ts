@@ -6,21 +6,38 @@
 // microtask = fulfilled promise: gets called before the next event loop
 // macrotask = setTimeout, setInterval: gets executed on the next event loop
 
+// console.log('syncronous');
 
-/** 
- * Replace all characters in a string
- * @param {string} text Text to be replaced 
- * @param {string} pattern Basic pattern
- * @returns {Function} Returns the new replaced text
- * @example
- * relaceAll('test', 'x'); 
-*/
-// function replaceAll(text: string, pattern: string): string {
-//   return text.split(pattern).join(pattern);
-// }
+// Promise.resolve().then(() => console.log('resolved promise microtask'));
 
-setTimeout(() => console.log('setTimeout macrotask'), 0);
+// setTimeout(() => console.log('setTimeout macrotask'), 0);
 
-Promise.resolve().then(() => console.log('resolved promise microtask'));
 
-console.log('syncronous');
+
+
+
+// const prevTime = Date.now();
+
+// const log = (v: string) => {
+//   console.log(`${v} elapsed: ${Date.now() - prevTime}ms`);
+// };
+
+// const codeBlocker = (): Promise<string> => {
+//   // return new Promise((resolve) => {
+//   //   let i = 0;
+//   //   while (i < 1e9) {i++;}
+//   //   resolve('codeBlock');
+//   // })
+//   return Promise.resolve().then(result => {
+//     let i = 0;
+//     while (i < 1e9) { i++ };
+//     return '1 billion loops';
+//   });
+// };
+
+// log('sync');
+
+// codeBlocker()
+//   .then(result => log(result));
+
+// log('sync2');
