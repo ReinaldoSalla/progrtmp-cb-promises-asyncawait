@@ -41,3 +41,35 @@
 //   .then(result => log(result));
 
 // log('sync2');
+
+// const promiseFunction = (): Promise<string> => {
+//   return new Promise((resolve) => {
+//     for (let i =0; i < 3e9; i++) {}
+//     resolve('string returned inside functionPromise\n\n\n');
+//   });
+// };
+
+const promiseFunction = (): Promise<string | void> => {
+  return Promise.resolve()
+    .then(() => {
+      for (let i = 0; i < 3e9; i++) {}
+      return 'string returned inside functionPromise\n\n\n\n\n';
+    });
+};
+
+console.time('id');
+console.timeLog('id');
+console.log('sync code 1');
+
+promiseFunction()
+  .then((result: string | void): void => {
+    console.timeLog('id');
+    console.log(result);
+  });
+
+console.timeLog('id');
+console.log('sync code 2');
+
+// console.time('id');
+// console.timeLog('id');
+// console.timeEnd('id');
