@@ -1,15 +1,43 @@
-/**
- * setTimeout with 0 and 1 sec
- * promise constructor
- * .then
- * promise.resolve
- * setTimeout wrapped in a promise
- * setTimeout after resolve
- * async await
- * await console.log
- * async await vs setTimeout
- * async await vs promise
- */
+const createPromise = async (): Promise<string> => (
+  new Promise((resolve) => {
+    console.log(`promise constructor before result`);
+    resolve(`promise resolved`);
+  })
+);
+
+const callPromise = async (): Promise<void> => {
+  console.log('started async function callPromise');
+  const result = await createPromise();
+  console.log(`result of callPromise using async-await = ${result}`);
+  console.log(`finished async function callPromise`);
+};
+
+const setTimeoutAfterResolve = (ms: number): Promise<void> => {
+  return new Promise((resolve) => {
+    resolve;
+    setTimeout(() => {
+      console.log(`setTimeoutAfterResolve ${ms}ms`);
+    }, ms);
+  });
+};
+
+const callSetTimeoutAfterResolve = async (ms: number): Promise<void> => {
+  console.log('start async function callSetTimeoutAfterResolve');
+  await setTimeoutAfterResolve(ms);
+  console.log('finished async function callSetTimeoutAfterResolve');
+};
+
+const asyncSleep = (ms: number): Promise<void> => (
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  })
+);
+
+const callAsyncSleep = async (ms: number): Promise<void> => {
+  console.log('start async function callAsyncSleep');
+  await asyncSleep(ms);
+  console.log(`finished async function callAsyncSleep`);
+};
 
 console.log('sync start');
 
@@ -25,39 +53,50 @@ setTimeout(() => {
   console.log('top level setTimeout 0ms');
 }, 0);
 
-const promise = new Promise((resolve) => {
-  console.log('inside promise constructor before resolve');
-  resolve('promise resolved');
-});
-
-promise
+createPromise()
   .then((result) => {
-    console.log(result);
+    console.log(`result of createPromise().then = ${result}`);
   });
 
-const setTimeoutWrappedInPromise = (ms: number): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-};
+callPromise();
 
-const ms = 0;
-setTimeoutWrappedInPromise(ms)
-  .then(() => {
-    console.log(`setTimeoutWrappedInPromise ${ms}ms`);
-  })
-
-const setTimeoutAfterResolve = (ms: number): Promise<string> => {
-  return new Promise((resolve) => {
-    resolve(`setTimeoutAfterResolve`);
-    setTimeout(() => {
-      console.log(`setTimeoutAfterResolve ${ms}ms`);
-    }, ms);
-  });
-};
-
-const t2 = 4000;
-setTimeoutAfterResolve(0)
+setTimeoutAfterResolve(1000)
   .then(() => console.log('.then for setTimeoutAfterResolve'));
 
-console.log('sync end');
+callSetTimeoutAfterResolve(1000);
+
+asyncSleep(1000)
+  .then(() => {
+    console.log(`.then for asynSleep 1000ms`);
+  })
+
+callAsyncSleep(1000);
+
+console.log('sync finished');
+
+/*
+// synchronous
+sync start
+promise constructor before result
+started async function callPromise
+promise constructor before result
+start async function callSetTimeoutAfterResolve
+start async function callAsyncSleep
+sync finished
+
+microtask queue
+.then for setTimeoutAfterResolve
+finished async function callSetTimeoutAfterResolve
+result using .then = promise resolved
+result using async-await = promise resolved
+finished async function callPromise
+
+macratask queue, also called task queue or callback queue
+top level setTimeout 2ms
+top level setTimeout 1ms
+top level setTimeout 0ms
+setTimeoutAfterResolve 1000ms
+setTimeoutAfterResolve 1000ms
+setTimeoutWrappedInPromise 1000ms
+finished async function callAsyncSleep
+*/
