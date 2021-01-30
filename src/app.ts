@@ -1,42 +1,63 @@
-// resources
-// https://www.youtube.com/watch?v=vn3tm0quoqE&t=613s
-// https://medium.com/jspoint/javascript-promises-and-async-await-as-fast-as-possible-d7c8c8ff0abc
-// https://stackoverflow.com/questions/39988890/do-javascript-promises-block-the-stack
+/**
+ * setTimeout with 0 and 1 sec
+ * promise constructor
+ * .then
+ * promise.resolve
+ * setTimeout wrapped in a promise
+ * setTimeout after resolve
+ * async await
+ * await console.log
+ * async await vs setTimeout
+ * async await vs promise
+ */
 
-// syncronous
-// microtask = fulfilled promise (mdn - promise callbacks): gets called before the next event loop
-// macrotask | task | task queue = setTimeout, setInterval: gets executed on the next event loop
+console.log('sync start');
 
-const resolveAfter2Seconds = async (): Promise<string> => {
-  console.log('starting slow promise');
+setTimeout(() => {
+  console.log('top level setTimeout 2ms');
+}, 2);
+
+setTimeout(() => {
+  console.log('top level setTimeout 1ms');
+}, 1);
+
+setTimeout(() => {
+  console.log('top level setTimeout 0ms');
+}, 0);
+
+const promise = new Promise((resolve) => {
+  console.log('inside promise constructor before resolve');
+  resolve('promise resolved');
+});
+
+promise
+  .then((result) => {
+    console.log(result);
+  });
+
+const setTimeoutWrappedInPromise = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('slow');
-      console.log('slow promise is done');
-    }, 10000);
+    setTimeout(resolve, ms);
   });
 };
 
-const resolveAfter1Second = async (): Promise<string> => {
-  console.log('starting fast promise');
+const ms = 0;
+setTimeoutWrappedInPromise(ms)
+  .then(() => {
+    console.log(`setTimeoutWrappedInPromise ${ms}ms`);
+  })
+
+const setTimeoutAfterResolve = (ms: number): Promise<string> => {
   return new Promise((resolve) => {
+    resolve(`setTimeoutAfterResolve`);
     setTimeout(() => {
-      resolve('fast');
-      console.log('fast promise is done');
-    }, 5000);
+      console.log(`setTimeoutAfterResolve ${ms}ms`);
+    }, ms);
   });
 };
 
-console.time('id');
+const t2 = 4000;
+setTimeoutAfterResolve(0)
+  .then(() => console.log('.then for setTimeoutAfterResolve'));
 
-const parallel = async () => {
-  const [slow, fast] = await Promise.all([
-    resolveAfter2Seconds(),
-    resolveAfter1Second()
-  ]);
-  console.log(slow);
-  console.log(fast);
-  console.timeEnd('id');
-};
-
-parallel();
+console.log('sync end');
