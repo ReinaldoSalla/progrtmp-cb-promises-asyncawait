@@ -1,44 +1,3 @@
-const createPromise = async (): Promise<string> => (
-  new Promise((resolve) => {
-    console.log(`promise constructor before result`);
-    resolve(`promise resolved`);
-  })
-);
-
-const callPromise = async (): Promise<void> => {
-  console.log('started async function callPromise');
-  const result = await createPromise();
-  console.log(`result of callPromise using async-await = ${result}`);
-  console.log(`finished async function callPromise`);
-};
-
-const setTimeoutAfterResolve = (ms: number): Promise<void> => {
-  return new Promise((resolve) => {
-    resolve;
-    setTimeout(() => {
-      console.log(`setTimeoutAfterResolve ${ms}ms`);
-    }, ms);
-  });
-};
-
-const callSetTimeoutAfterResolve = async (ms: number): Promise<void> => {
-  console.log('start async function callSetTimeoutAfterResolve');
-  await setTimeoutAfterResolve(ms);
-  console.log('finished async function callSetTimeoutAfterResolve');
-};
-
-const asyncSleep = (ms: number): Promise<void> => (
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  })
-);
-
-const callAsyncSleep = async (ms: number): Promise<void> => {
-  console.log('start async function callAsyncSleep');
-  await asyncSleep(ms);
-  console.log(`finished async function callAsyncSleep`);
-};
-
 console.log('sync start');
 
 setTimeout(() => {
@@ -53,22 +12,60 @@ setTimeout(() => {
   console.log('top level setTimeout 0ms');
 }, 0);
 
-createPromise()
-  .then((result) => {
-    console.log(`result of createPromise().then = ${result}`);
-  });
+const promise = new Promise((resolve) => {
+  console.log('promise constructor before resolve');
+  resolve('Promise resolved');
+});
+
+promise.then((result) => {
+  console.log(`result of createPromise().then = ${result}`);
+});
+
+const callPromise = async (): Promise<void> => {
+  console.log('started async function callPromise');
+  const result = await promise; 
+  console.log(`result of callPromise using async-await = ${result}`);
+  console.log(`finished async function callPromise`);
+};
 
 callPromise();
+
+const setTimeoutAfterResolve = (ms: number): Promise<void> => {
+  return new Promise((resolve) => {
+    resolve;
+    setTimeout(() => {
+      console.log(`setTimeoutAfterResolve ${ms}ms`);
+    }, ms);
+  });
+};
 
 setTimeoutAfterResolve(1000)
   .then(() => console.log('.then for setTimeoutAfterResolve'));
 
+const callSetTimeoutAfterResolve = async (ms: number): Promise<void> => {
+  console.log('start async function callSetTimeoutAfterResolve');
+  await setTimeoutAfterResolve(ms);
+  console.log('finished async function callSetTimeoutAfterResolve');
+};
+
 callSetTimeoutAfterResolve(1000);
+
+const asyncSleep = (ms: number): Promise<void> => (
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  })
+);
 
 asyncSleep(1000)
   .then(() => {
     console.log(`.then for asynSleep 1000ms`);
   })
+
+const callAsyncSleep = async (ms: number): Promise<void> => {
+  console.log('start async function callAsyncSleep');
+  await asyncSleep(ms);
+  console.log(`finished async function callAsyncSleep`);
+};
 
 callAsyncSleep(1000);
 
