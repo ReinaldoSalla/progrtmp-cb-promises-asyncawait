@@ -1,4 +1,4 @@
-console.log('sync start');
+// console.log('sync start');
 
 setTimeout(() => {
   console.log('top level setTimeout 2ms');
@@ -18,11 +18,11 @@ const promise = new Promise((resolve) => {
 });
 
 promise.then((result) => {
-  console.log(`result of createPromise().then = ${result}`);
+  // console.log(`result of createPromise().then = ${result}`);
 });
 
 const callPromise = async (): Promise<void> => {
-  console.log('started async function callPromise');
+  // console.log('started async function callPromise');
   const result = await promise; 
   console.log(`result of callPromise using async-await = ${result}`);
   console.log(`finished async function callPromise`);
@@ -33,9 +33,9 @@ callPromise();
 const setTimeoutAfterResolve = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
     resolve;
-    setTimeout(() => {
-      console.log(`setTimeoutAfterResolve ${ms}ms`);
-    }, ms);
+    // setTimeout(() => {
+    //   console.log(`setTimeoutAfterResolve ${ms}ms`);
+    // }, ms);
   });
 };
 
@@ -43,7 +43,7 @@ setTimeoutAfterResolve(1000)
   .then(() => console.log('.then for setTimeoutAfterResolve'));
 
 const callSetTimeoutAfterResolve = async (ms: number): Promise<void> => {
-  console.log('start async function callSetTimeoutAfterResolve');
+  // console.log('start async function callSetTimeoutAfterResolve');
   await setTimeoutAfterResolve(ms);
   console.log('finished async function callSetTimeoutAfterResolve');
 };
@@ -52,7 +52,7 @@ callSetTimeoutAfterResolve(1000);
 
 const asyncSleep = (ms: number): Promise<void> => (
   new Promise((resolve) => {
-    setTimeout(resolve, ms);
+    // setTimeout(resolve, ms);
   })
 );
 
@@ -62,14 +62,28 @@ asyncSleep(1000)
   })
 
 const callAsyncSleep = async (ms: number): Promise<void> => {
-  console.log('start async function callAsyncSleep');
+  // console.log('start async function callAsyncSleep');
   await asyncSleep(ms);
   console.log(`finished async function callAsyncSleep`);
 };
 
 callAsyncSleep(1000);
 
-console.log('sync finished');
+// console.log('sync finished');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 // synchronous
