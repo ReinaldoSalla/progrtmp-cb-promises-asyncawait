@@ -17,29 +17,24 @@ const promise = new Promise((resolve) => {
   resolve('Promise resolved');
 });
 
-promise.then((result) => {
-  console.log(`result of promise.then = ${result}`);
-});
-
 const callPromise = async (): Promise<void> => {
   console.log('started async function callPromise');
   const result = await promise; 
-  console.log(`result of callPromise using async-await = ${result}`);
+  console.log(`result of await promise = ${result}`);
   console.log(`finished async function callPromise`);
 };
 
 callPromise();
+
+promise.then((result) => {
+  console.log(`result of promise.then = ${result}`);
+});
 
 const asyncSleep = (ms: number): Promise<void> => (
   new Promise((resolve) => {
     setTimeout(resolve, ms);
   })
 );
-
-asyncSleep(1000)
-  .then(() => {
-    console.log(`.then for asynSleep 1000ms`);
-  })
 
 const callAsyncSleep = async (ms: number): Promise<void> => {
   console.log('start async function callAsyncSleep');
@@ -50,51 +45,3 @@ const callAsyncSleep = async (ms: number): Promise<void> => {
 callAsyncSleep(1000);
 
 console.log('sync finished');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// /*
-// // synchronous
-// sync start
-// promise constructor before result
-// started async function callPromise
-// promise constructor before result
-// start async function callSetTimeoutAfterResolve
-// start async function callAsyncSleep
-// sync finished
-
-// microtask queue
-// .then for setTimeoutAfterResolve
-// finished async function callSetTimeoutAfterResolve
-// result using .then = promise resolved
-// result using async-await = promise resolved
-// finished async function callPromise
-
-// macratask queue, also called task queue or callback queue
-// top level setTimeout 2ms
-// top level setTimeout 1ms
-// top level setTimeout 0ms
-// setTimeoutAfterResolve 1000ms
-// setTimeoutAfterResolve 1000ms
-// setTimeoutWrappedInPromise 1000ms
-// finished async function callAsyncSleep
-// */
-
-// const promise = new Promise((resolve, reject) => {
-//   resolve("Hattori");
-//   setTimeout(()=>console.log("Yoshi"), 500);
-//  });
-//  promise.then(val => console.log("Success: " + val))
-//   .catch(e => console.log("Error: " + e));
