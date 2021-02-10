@@ -14,7 +14,7 @@ setTimeout(() => {
 
 const promise = new Promise((resolve) => {
   console.log('promise constructor before resolve');
-  resolve('Promise resolved');
+  resolve('promise resolved');
 });
 
 const callPromise = async (): Promise<void> => {
