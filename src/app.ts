@@ -1,15 +1,15 @@
 console.log('sync start');
 
 setTimeout(() => {
-  console.log('top level setTimeout 2ms');
+  console.log('top-level setTimeout 2ms');
 }, 2);
 
 setTimeout(() => {
-  console.log('top level setTimeout 1ms');
+  console.log('top-level setTimeout 1ms');
 }, 1);
 
 setTimeout(() => {
-  console.log('top level setTimeout 0ms');
+  console.log('top-level setTimeout 0ms');
 }, 0);
 
 const promise = new Promise((resolve) => {
