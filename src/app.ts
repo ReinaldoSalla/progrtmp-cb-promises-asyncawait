@@ -17,7 +17,7 @@ const promise = new Promise((resolve) => {
   resolve('promise resolved');
 });
 
-const callPromise = async (): Promise<void> => {
+async function callPromise() {
   console.log('started async function callPromise');
   const result = await promise; 
   console.log(`result of await promise = ${result}`);
@@ -30,13 +30,13 @@ promise.then((result) => {
   console.log(`result of promise.then = ${result}`);
 });
 
-const asyncSleep = (ms: number): Promise<void> => (
-  new Promise((resolve) => {
+async function asyncSleep(ms: number) {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   })
-);
+}
 
-const callAsyncSleep = async (ms: number): Promise<void> => {
+async function callAsyncSleep(ms: number) {
   console.log('start async function callAsyncSleep');
   await asyncSleep(ms);
   console.log(`finished async function callAsyncSleep`);
